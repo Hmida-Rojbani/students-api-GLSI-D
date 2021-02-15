@@ -19,5 +19,13 @@ app.get('/api/students/:id', (req,res) => {
     res.send(student);
 })
 
+app.post('/api/students', (req,res) => {
+    let student = {
+        id : students.length + 1,
+        name : req.body.name
+    };
+    students.push(student);
+    res.send(student);
+})
 
 app.listen(port,() => console.log(`Server starts on ${port}...`));
