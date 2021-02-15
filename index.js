@@ -37,4 +37,14 @@ app.post('/api/students', (req,res) => {
     res.send(student);
 })
 
+// update student
+app.put('/api/students/:id', (req,res) => {
+    let student = students.find(s => s.id === parseInt(req.params.id));
+    if(!student) return res.status(404).send('Student with this id is not found');
+    let validation_result = Joi.validate(req.body, student_schema);
+    if(validation_result.error)
+        return res.status(400).send(validation_result.error.details[0].message);
+    student.name =  req.body.name;
+    res.send(student);
+})
 app.listen(port,() => console.log(`Server starts on ${port}...`));
