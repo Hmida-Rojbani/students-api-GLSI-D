@@ -1,4 +1,5 @@
 const express = require('express');
+const Joi = require('joi');
 const port = process.env.PORT || 3000;
 const app = express();
 
@@ -19,7 +20,15 @@ app.get('/api/students/:id', (req,res) => {
     res.send(student);
 })
 
+const student_schema = {
+    name : Joi.string().min(3).max(50).required()
+};
 app.post('/api/students', (req,res) => {
+    //if(!req.body.name || req.body.name.length < 3)
+    //    return res.status(400).send('Student name is Required and must be al least 3 charcters long');
+    let validation_result = Joi.validate(req.body, student_schema);
+    if(validation_result.error)
+        return res.status(400).send(validation_result.error.details[0].message);
     let student = {
         id : students.length + 1,
         name : req.body.name
